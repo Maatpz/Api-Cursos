@@ -37,8 +37,10 @@ public class Cursos {
     @Column(nullable = false)
     private String category;
 
+    private Boolean active;
 
-    private boolean active;
+    
+    private String professor;
 
     @CreationTimestamp
     private LocalDateTime created_at;
@@ -53,7 +55,4 @@ public class Cursos {
 
     // public Cursos() {
     // }
-
-
-
 }
