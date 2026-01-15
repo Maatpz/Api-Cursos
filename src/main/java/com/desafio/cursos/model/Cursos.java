@@ -13,12 +13,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GenerationType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name = "tb_cursos")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cursos {
 
     @Id
@@ -29,7 +33,9 @@ public class Cursos {
     @Column(nullable = false)
     private String name;
     
-    private Category category;
+    @NotBlank(message = "A categoria do curso é obrigatória")
+    @Column(nullable = false)
+    private String category;
 
 
     private boolean active;
@@ -40,5 +46,14 @@ public class Cursos {
     @UpdateTimestamp
     private LocalDateTime updated_at;
     
+    // public Cursos(String name, String category) {
+    //     this.name = name;
+    //     this.category = category;
+    // }
+
+    // public Cursos() {
+    // }
+
+
 
 }
