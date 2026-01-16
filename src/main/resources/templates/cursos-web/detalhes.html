@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizar Curso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#121214] text-white min-h-screen flex flex-col items-center pt-20 font-sans">
+    
+    <h1 class="text-2xl font-bold text-[#8257e5] mb-8">Detalhes do Curso</h1>
+
+    
+    <div class="w-full max-w-md bg-[#202024] rounded-lg shadow-2xl overflow-hidden">
+        
+        
+        <div class="bg-[#8257e5] p-4 flex justify-between items-center">
+            <h2 class="text-lg font-bold" th:text="${curso.name}">React</h2>
+           
+            <span th:if="${curso.active}" class="bg-green-500/30 text-green-300 px-3 py-1 rounded-full text-xs font-medium">Ativo</span>
+            <span th:unless="${curso.active}" class="bg-red-500/30 text-red-300 px-3 py-1 rounded-full text-xs font-medium">Inativo</span>
+        </div>
+        
+       
+        <div class="p-8 space-y-4">
+            <div class="flex justify-between border-b border-[#323238] pb-3">
+                <span class="text-gray-400">Curso:</span>
+                <span th:text="${curso.name}" class="font-medium">React</span>
+            </div>
+            <div class="flex justify-between border-b border-[#323238] pb-3">
+                <span class="text-gray-400">Categoria:</span>
+                <span th:text="${curso.category}" class="font-medium">Front-end</span>
+            </div>
+            <div class="flex justify-between border-b border-[#323238] pb-3">
+                <span class="text-gray-400">Professor:</span>
+                <span th:text="${curso.professor != null ? curso.professor : 'Não definido'}" class="font-medium">Diego Fernandes</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-400">Criado em:</span>
+                <span th:text="${#temporals.format(curso.created_at, 'dd/MM/yyyy HH:mm')}" class="font-medium">20/01/24</span>
+            </div>
+        </div>
+
+        
+        <div class="p-6 space-y-3 border-t border-[#323238]">
+            
+            <a th:href="@{/cursos-web/editar/{id}(id=${curso.id})}" 
+               class="block w-full bg-[#8257e5] hover:bg-[#9466ff] text-white font-bold py-3 rounded text-center text-xs uppercase transition-colors">
+                Editar curso
+            </a>
+      
+            <form th:action="@{/cursos-web/toggle-status/{id}(id=${curso.id})}" method="post">
+                <button type="submit" 
+                        th:class="${curso.active} ? 'w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded text-center text-xs uppercase transition-colors' : 'w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded text-center text-xs uppercase transition-colors'">
+                    <span th:text="${curso.active} ? 'Desativar curso' : 'Ativar curso'">Toggle Status</span>
+                </button>
+            </form>
+            
+       
+            <form th:action="@{/cursos-web/excluir/{id}(id=${curso.id})}" method="post" 
+                  onsubmit="return confirm('Tem certeza que deseja excluir este curso?');">
+                <button type="submit" 
+                        class="w-full bg-[#e52e4d] hover:bg-[#ff4d6d] text-white font-bold py-3 rounded text-center text-xs uppercase transition-colors">
+                    Excluir curso
+                </button>
+            </form>
+        </div>
+    </div>
+
+  
+    <div class="mt-6">
+        <a href="/cursos-web/lista" class="text-gray-500 hover:text-white text-sm transition-colors">
+            ← Voltar para a lista
+        </a>
+    </div>
+
+</body>
+</html>

@@ -15,16 +15,15 @@ import jakarta.validation.Valid;
 import com.desafio.cursos.model.Cursos;
 
 import com.desafio.cursos.Service.CursosService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
-
 @RestController
-@RequestMapping("/cursos")
+@RequestMapping("api/cursos")
 public class CursosController {
     
     @Autowired
@@ -35,13 +34,17 @@ public class CursosController {
     public ResponseEntity<Cursos> criarCurso(@RequestBody @Valid Cursos curso) {
         Cursos novoCurso = cursoService.criarCurso(curso, curso.getName(), curso.getCategory(), curso.getActive(), curso.getProfessor());
         return new ResponseEntity<>(novoCurso, HttpStatus.CREATED);
-      
     }
 
-    //Get
     @GetMapping("")
     public ResponseEntity<List<Cursos>> listarCursos() {
         return new ResponseEntity<>(cursoService.listarCursos(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cursos> obterCursoPorId(@PathVariable("id") UUID id) {
+        Cursos curso = cursoService.obterCursoPorId(id);
+        return new ResponseEntity<>(curso, HttpStatus.OK);
     }
 
     @GetMapping("/filtro")
@@ -52,29 +55,24 @@ public class CursosController {
         cursoService.listarCursosPorNameandCategory(name, category));
     }
 
-    //Put
-
     @PutMapping("/{id}")
     public ResponseEntity<Cursos> atualizarCurso(
         @PathVariable("id") UUID id,
         @RequestBody Cursos cursoAtualizado) {
         Cursos curso = cursoService.atualizarCurso(id, cursoAtualizado);
         return new ResponseEntity<>(curso, HttpStatus.OK);
-
     }
 
-    //Delete
-
-    public void deletarCurso(@PathVariable("id") UUID id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCurso(@PathVariable("id") UUID id) {
         cursoService.deletarCurso(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    //Patch 
-
+    
     @PatchMapping("/{id}/ativar")
     public ResponseEntity<Cursos> ativarCurso(@PathVariable("id") UUID id) {
         Cursos cursoAtivado = cursoService.atualizarStatusCurso(id, true);
         return new ResponseEntity<>(cursoAtivado, HttpStatus.OK);
     }
-
+    
 }
